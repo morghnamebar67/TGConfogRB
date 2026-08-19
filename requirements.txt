@@ -1,0 +1,8 @@
+telethon>=1.43
+aiohttp>=3.9
+aiofiles
+GitPython>=3.1.43
+requests>=2.32
+
+# For better logging and async support
+async-timeout>=4.0
