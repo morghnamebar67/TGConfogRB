@@ -1,0 +1,37 @@
+name: Public Forwarder
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: public-forwarder
+  cancel-in-progress: false
+
+jobs:
+  forwarder:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run public forwarder
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          STRING_SESSION: ${{ secrets.STRING_SESSION }}
+          RUBIKA_BOT_TOKEN: ${{ secrets.RUBIKA_BOT_TOKEN }}
+          DATA_REPO_PAT: ${{ secrets.DATA_REPO_PAT }}
+          DATA_REPO_URL: ${{ secrets.DATA_REPO_URL }}
+        run: python forwarder_public.py
